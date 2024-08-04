@@ -1,37 +1,47 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
   FlatList,
-  Button,
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import axios from 'axios';
-import {User} from '../models/User';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../store';
+import {deleteUser, fetchUsers} from '../store/usersSlice';
+import UserImage from './UserImage';
 
 const UserList: React.FC<{navigation: any}> = ({navigation}) => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const {users, loading, error} = useSelector(
+    (state: RootState) => state.users,
+  );
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/users');
-        setUsers(response.data);
-      } catch (error) {
-        setError('Failed to fetch users. Please try again later.');
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
-    fetchUsers();
-  }, []);
+  const handleDelete = (userId: string) => {
+    Alert.alert(
+      'Confirm Delete',
+      'Are you sure you want to delete this user?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => dispatch(deleteUser(userId)),
+        },
+      ],
+      {cancelable: true},
+    );
+  };
 
   if (loading) {
     return (
@@ -54,23 +64,30 @@ const UserList: React.FC<{navigation: any}> = ({navigation}) => {
       <FlatList
         data={users}
         keyExtractor={item => item.id || ''}
-        style={styles.container}
         renderItem={({item}) => (
-          <View style={styles.card}>
-            <Text style={styles.name}>
-              {item.firstName} {item.lastName}
-            </Text>
-            <Text style={styles.details}>
-              Height: {item.height} cm | Weight: {item.weight} kg
-            </Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() =>
-                navigation.navigate('UserDetail', {userId: item.id})
-              }>
-              <Text style={styles.buttonText}>View Details</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() =>
+              navigation.navigate('UserDetail', {userId: item.id})
+            }>
+            <View style={styles.cardContent}>
+              <UserImage
+                photoUrl={item.photo}
+                customStyle={{marginRight: 15}}
+              />
+              <View style={styles.userInfo}>
+                <Text style={styles.name}>
+                  {item.firstName} {item.lastName}
+                </Text>
+                <Text style={styles.details}>
+                  Height: {item.height} cm | Weight: {item.weight} kg
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => handleDelete(item.id)}>
+                <Icon name="delete-outline" size={24} color="#dc3545" />
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
         )}
         contentContainerStyle={styles.listContainer}
       />
@@ -121,6 +138,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  userInfo: {
+    flex: 1,
   },
   name: {
     fontSize: 18,
@@ -132,20 +159,9 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 8,
   },
-  button: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 4,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
   addButton: {
     backgroundColor: '#28a745',
-    padding: 14,
+    padding: 16,
     borderRadius: 4,
     alignItems: 'center',
     marginTop: 16,
