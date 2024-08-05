@@ -1,13 +1,14 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {NewOrUpdateUser, User} from '../models/User';
-import Config from 'react-native-config';
+
+const API_URL = 'https://manageuser-back.sasdev.space';
 
 export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
   async ({page = 1, pageSize = 10}: {page?: number; pageSize?: number}) => {
     const response = await axios.get(
-      `${Config.API_URL}/users?page=${page}&pageSize=${pageSize}`,
+      `${API_URL}/users?page=${page}&pageSize=${pageSize}`,
     );
     return response.data;
   },
@@ -16,7 +17,7 @@ export const fetchUsers = createAsyncThunk(
 export const fetchUserById = createAsyncThunk(
   'users/fetchUserById',
   async (userId: string) => {
-    const response = await axios.get(`${Config.API_URL}/users/${userId}`);
+    const response = await axios.get(`${API_URL}/users/${userId}`);
     return response.data;
   },
 );
@@ -24,7 +25,7 @@ export const fetchUserById = createAsyncThunk(
 export const createUser = createAsyncThunk(
   'users/createUser',
   async (user: NewOrUpdateUser) => {
-    const response = await axios.post(`${Config.API_URL}/users`, user);
+    const response = await axios.post(`${API_URL}/users`, user);
     return response.data;
   },
 );
@@ -32,7 +33,7 @@ export const createUser = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   'users/updateUser',
   async ({id, ...user}: {id: string} & NewOrUpdateUser) => {
-    const response = await axios.patch(`${Config.API_URL}/users/${id}`, user);
+    const response = await axios.patch(`${API_URL}/users/${id}`, user);
     return response.data;
   },
 );
@@ -40,7 +41,7 @@ export const updateUser = createAsyncThunk(
 export const deleteUser = createAsyncThunk(
   'users/deleteUser',
   async (userId: string) => {
-    await axios.delete(`${Config.API_URL}/users/${userId}`);
+    await axios.delete(`${API_URL}/users/${userId}`);
     return userId;
   },
 );

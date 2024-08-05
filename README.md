@@ -1,8 +1,22 @@
+# Manageuser
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+
+## Backend Information
+
+The backend for this application is ready and already connected. You can find the backend repository here: [User Management Backend](https://github.com/AlexeySazonov31/user-management-backend).
+
+The public link for the backend service is: [Manage User API](https://manageuser-back.sasdev.space/users).
+
+## Preview
+
+Here is a preview of the Manageuser app:
+
+![Manageuser Preview](https://utfs.io/f/b6d4e9ab-e412-4443-ac6c-0c3fd15ea405-2764yc.png)
 
 # Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
 ## Step 1: Start the Metro Server
 

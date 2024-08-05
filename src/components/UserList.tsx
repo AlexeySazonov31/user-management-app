@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
+    color: '#000',
   },
   details: {
     fontSize: 14,
@@ -147,15 +148,14 @@ const styles = StyleSheet.create({
   },
   addButton: {
     backgroundColor: '#28a745',
-    padding: 16,
-    borderRadius: 4,
+    padding: 12,
+    borderRadius: 5,
     alignItems: 'center',
-    marginTop: 16,
+    marginVertical: 8,
   },
   addButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
