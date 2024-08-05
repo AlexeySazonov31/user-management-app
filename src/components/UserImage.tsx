@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   ViewStyle,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface UserImageProps {
   photoUrl?: string;
@@ -61,7 +60,14 @@ const UserImage: React.FC<UserImageProps> = ({
             styles.placeholder,
             {width: size, height: size, borderRadius: size / 2},
           ]}>
-          <Icon name="account" size={size / 2.5} color="#888" />
+          <Image
+            source={require('../../assets/icons/account.png')}
+            alt="account"
+            style={{
+              width: +(+size / 2.5),
+              height: +(+size / 2.5),
+            }}
+          />
         </View>
       )}
     </View>

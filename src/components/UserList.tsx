@@ -6,8 +6,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../store';
 import {fetchUsers, setPage} from '../store/usersSlice';
@@ -69,7 +69,14 @@ const UserList: React.FC<{navigation: any}> = ({navigation}) => {
                   Height: {item.height} cm | Weight: {item.weight} kg
                 </Text>
               </View>
-              <Icon name="arrow-right" size={24} color="#999" />
+              <Image
+                source={require('../../assets/icons/right-arrow.png')}
+                alt="arrow"
+                style={{
+                  width: 24,
+                  height: 24,
+                }}
+              />
             </View>
           </TouchableOpacity>
         )}
