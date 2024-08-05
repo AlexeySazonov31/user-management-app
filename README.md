@@ -14,6 +14,22 @@ Here is a preview of the Manageuser app:
 
 ![Manageuser Preview](https://utfs.io/f/b6d4e9ab-e412-4443-ac6c-0c3fd15ea405-2764yc.png)
 
+# Don't forget!
+
+Navigate to iOS directory and install CocoaPods dependencies after install all project dependencies
+
+```bash
+yarn
+# or
+npm install
+
+cd ios
+pod install
+cd ..
+```
+
+Make sure you have completed the React Native Environment Setup instructions. Details below:
+
 # Getting Started
 
 > **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
