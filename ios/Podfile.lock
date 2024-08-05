@@ -1172,7 +1172,7 @@ PODS:
     - React-utils (= 0.74.4)
   - RNCPicker (2.7.7):
     - React-Core
-  - RNScreens (3.33.0):
+  - RNScreens (3.29.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1188,7 +1188,6 @@ PODS:
     - React-ImageManager
     - React-NativeModulesApple
     - React-RCTFabric
-    - React-RCTImage
     - React-rendererdebug
     - React-utils
     - ReactCommon/turbomodule/bridging
@@ -1439,7 +1438,7 @@ SPEC CHECKSUMS:
   React-utils: e8b0eac797c81c574b24f6515fec4015599b643c
   ReactCommon: eebffb37a90138c6db6eb8b2d952e7e5c6bc083c
   RNCPicker: b7873ba797dc586bfaf3307d737cbdc620a9ff3e
-  RNScreens: d2a12528d1abe4922e7ee5c9a00dd40c827c2ab5
+  RNScreens: 23dad53fc9db1da2c93e647ae33fd7ce2bd49d60
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 0efb3e1bd40ba59b009f01badea863281101de78
 

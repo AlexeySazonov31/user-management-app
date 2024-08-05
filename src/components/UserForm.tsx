@@ -82,7 +82,10 @@ const UserForm: React.FC<{route: any; navigation: any}> = ({
         <TouchableOpacity
           style={styles.input}
           onPress={() => setModalVisible(true)}>
-          <Text style={styles.pickerText}>
+          <Text
+            style={
+              form.gender ? styles.pickerText : styles.pickerTextPlaceholder
+            }>
             {form.gender || 'Select Gender'}
           </Text>
         </TouchableOpacity>
@@ -130,7 +133,7 @@ const UserForm: React.FC<{route: any; navigation: any}> = ({
             <TouchableOpacity
               style={styles.option}
               onPress={() => setModalVisible(false)}>
-              <Text style={styles.optionText}>Cancel</Text>
+              <Text style={styles.cancel}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -190,8 +193,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
+  pickerTextPlaceholder: {
+    fontSize: 15,
+    color: '#c5c5c7',
+  },
   pickerText: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#000',
   },
   modalContainer: {
@@ -215,6 +222,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
     textAlign: 'center',
+  },
+  cancel: {
+    color: '#e61919',
+    textAlign: 'center',
+    fontSize: 16,
+    marginTop: 10,
   },
   footer: {
     padding: 16,

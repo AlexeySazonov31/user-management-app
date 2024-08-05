@@ -1,25 +1,29 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
-import { NewOrUpdateUser, User } from '../models/User';
+import {NewOrUpdateUser, User} from '../models/User';
 import Config from 'react-native-config';
 
-export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await axios.get(`${Config.API_URL}/users`);
-  return response.data;
-});
+export const fetchUsers = createAsyncThunk(
+  'users/fetchUsers',
+  async ({page = 1, pageSize = 10}: {page?: number; pageSize?: number}) => {
+    const response = await axios.get(
+      `${Config.API_URL}/users?page=${page}&pageSize=${pageSize}`,
+    );
+    return response.data;
+  },
+);
 
 export const fetchUserById = createAsyncThunk(
   'users/fetchUserById',
   async (userId: string) => {
     const response = await axios.get(`${Config.API_URL}/users/${userId}`);
     return response.data;
-  }
+  },
 );
 
 export const createUser = createAsyncThunk(
   'users/createUser',
   async (user: NewOrUpdateUser) => {
-    console.log(user);
     const response = await axios.post(`${Config.API_URL}/users`, user);
     return response.data;
   },
@@ -27,7 +31,7 @@ export const createUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   'users/updateUser',
-  async ({ id, ...user }: { id: string } & NewOrUpdateUser) => {
+  async ({id, ...user}: {id: string} & NewOrUpdateUser) => {
     const response = await axios.patch(`${Config.API_URL}/users/${id}`, user);
     return response.data;
   },
@@ -41,12 +45,11 @@ export const deleteUser = createAsyncThunk(
   },
 );
 
-// helpers
 const handlePending = (state: any) => {
   state.loading = true;
 };
 
-const handleFulfilled = (state: any, action: any) => {
+const handleFulfilled = (state: any, _action: any) => {
   state.loading = false;
   state.error = null;
 };
@@ -64,14 +67,28 @@ const usersSlice = createSlice({
     user: null as User | null,
     loading: false,
     error: null as string | null,
+    page: 1,
+    pageSize: 10,
+    totalPages: 0,
+    totalUsers: 0,
   },
-  reducers: {},
+  reducers: {
+    setPage(state, action) {
+      state.page = action.payload;
+    },
+    setPageSize(state, action) {
+      state.pageSize = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchUsers.pending, state => handlePending(state))
       .addCase(fetchUsers.fulfilled, (state, action) => {
         handleFulfilled(state, action);
-        state.users = action.payload;
+        state.users = [...state.users, ...action.payload.results];
+        state.page = action.payload.page;
+        state.totalPages = action.payload.total_pages;
+        state.totalUsers = action.payload.total_users;
       })
       .addCase(fetchUsers.rejected, (state, action) =>
         handleRejected(state, action),
@@ -83,7 +100,8 @@ const usersSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(fetchUserById.rejected, (state, action) =>
-        handleRejected(state, action))
+        handleRejected(state, action),
+      )
 
       .addCase(deleteUser.fulfilled, (state, action) => {
         handleFulfilled(state, action);
@@ -105,4 +123,5 @@ const usersSlice = createSlice({
   },
 });
 
+export const {setPage, setPageSize} = usersSlice.actions;
 export default usersSlice.reducer;

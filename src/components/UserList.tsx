@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {
   View,
   Text,
@@ -6,44 +6,30 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../store';
-import {deleteUser, fetchUsers} from '../store/usersSlice';
+import {fetchUsers, setPage} from '../store/usersSlice';
 import UserImage from './UserImage';
 
 const UserList: React.FC<{navigation: any}> = ({navigation}) => {
   const dispatch = useDispatch<AppDispatch>();
-  const {users, loading, error} = useSelector(
+  const {users, loading, error, page, pageSize, totalPages} = useSelector(
     (state: RootState) => state.users,
   );
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    dispatch(fetchUsers({page, pageSize}));
+  }, [dispatch, page, pageSize]);
 
-  const handleDelete = (userId: string) => {
-    Alert.alert(
-      'Confirm Delete',
-      'Are you sure you want to delete this user?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => dispatch(deleteUser(userId)),
-        },
-      ],
-      {cancelable: true},
-    );
-  };
+  const loadMoreUsers = useCallback(() => {
+    if (!loading && page < totalPages) {
+      dispatch(setPage(page + 1));
+    }
+  }, [dispatch, loading, page, totalPages]);
 
-  if (loading) {
+  if (loading && page === 1) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" />
@@ -83,13 +69,13 @@ const UserList: React.FC<{navigation: any}> = ({navigation}) => {
                   Height: {item.height} cm | Weight: {item.weight} kg
                 </Text>
               </View>
-              <TouchableOpacity onPress={() => handleDelete(item.id)}>
-                <Icon name="delete-outline" size={24} color="#dc3545" />
-              </TouchableOpacity>
+              <Icon name="arrow-right" size={24} color="#999" />
             </View>
           </TouchableOpacity>
         )}
         contentContainerStyle={styles.listContainer}
+        onEndReached={loadMoreUsers}
+        onEndReachedThreshold={0.1}
       />
       <TouchableOpacity
         style={styles.addButton}

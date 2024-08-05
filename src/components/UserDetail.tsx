@@ -28,14 +28,31 @@ const UserDetail: React.FC<{route: any; navigation: any}> = ({
     }, [dispatch, userId]),
   );
 
-  const handleDelete = async () => {
-    try {
-      await dispatch(deleteUser(userId)).unwrap();
-      navigation.goBack();
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Unable to delete user');
-    }
+  const handleDelete = (id: string) => {
+    Alert.alert(
+      'Confirm Delete',
+      'Are you sure you want to delete this user?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await dispatch(deleteUser(id)).unwrap();
+              navigation.goBack();
+            } catch (error) {
+              console.error(error);
+              Alert.alert('Error', 'Unable to delete user');
+            }
+          },
+        },
+      ],
+      {cancelable: true},
+    );
   };
 
   if (loading) return <ActivityIndicator size="large" style={styles.loading} />;
@@ -72,7 +89,7 @@ const UserDetail: React.FC<{route: any; navigation: any}> = ({
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.deleteButton]}
-          onPress={handleDelete}>
+          onPress={() => handleDelete(userId)}>
           <Text style={styles.buttonText}>Delete User</Text>
         </TouchableOpacity>
       </View>
